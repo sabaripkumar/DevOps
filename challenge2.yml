@@ -1,0 +1,34 @@
+---
+# Use Variables and create user with default password, assign to group, check & show it worked
+- hosts: localhost
+  vars_prompt:
+    - name: username
+      prompt: What is the username to be created?
+      private: no
+    - name: password
+      prompt: What is the default password for the user?
+    - name: groupname
+      prompt: What is the groupname to be created?
+      private: no
+
+  tasks:
+    - name: create user
+      shell: sudo useradd -m {{username}} -p {{password}}
+    - name: create group
+      shell: sudo groupadd {{groupname}}
+    - name: add user to group
+      shell: sudo usermod -a -G {{groupname}} {{username}}
+    - name: check all ok
+      shell: id {{username}}
+      register: contents
+    - name: print created user
+      debug:
+        var: contents.stdout_lines
+    
+    
+
+
+     
+  
+  
+
